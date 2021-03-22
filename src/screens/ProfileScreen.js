@@ -1,7 +1,15 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Button, Image } from "react-native";
+import Fire from "../../Fire";
 
 const ProfileScreen = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
+
+  useEffect(() => {}, []);
+
   return (
     <View style={css.container}>
       <Text>ProfileScreen...</Text>

@@ -6,31 +6,63 @@ import {
   TextInput,
   TouchableOpacity,
   StatusBar,
+  Image,
 } from "react-native";
-import * as firebase from "firebase";
+import { Ionicons } from "@expo/vector-icons";
+import Fire from "../../Fire";
+import UserPermissions from "../utilities/UserPermissions";
+import * as ImagePicker from "expo-image-picker";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const handleSignUp = ({ navigation }) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        return userCredentials.user.updateProfile({
-          displayName: name,
-        });
-      })
-      .catch((error) => setErrorMessage(error.message));
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(email, password)
+    //   .then((userCredentials) => {
+    //     return userCredentials.user.updateProfile({
+    //       displayName: name,
+    //     });
+    //   })
+    //   .catch((error) => setErrorMessage(error.message));
+    Fire.shared.createUser({ name, email, password, avatar });
+  };
+
+  const handlePickAvatar = async () => {
+    UserPermissions.getCameraPermission();
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if (!result.cancelled) {
+      setAvatar(result.uri);
+    }
   };
 
   return (
     <View style={css.container}>
       <StatusBar barStyle="light-content"></StatusBar>
       <Text style={css.greeting}>{"Hello again\nSign to get started."}</Text>
+      <TouchableOpacity
+        style={css.avatarPlaceholder}
+        onPress={() => handlePickAvatar()}
+      >
+        <Image source={{ uri: avatar }} style={css.avatar} />
+        <Ionicons
+          name="ios-add"
+          size={40}
+          color="#FFF"
+          style={{ marginTop: 6, marginLeft: 2 }}
+        ></Ionicons>
+      </TouchableOpacity>
 
       <View style={css.errorMessage}>
         {errorMessage && <Text style={css.error}>{errorMessage}</Text>}
@@ -133,5 +165,31 @@ const css = StyleSheet.create({
     height: 52,
     alignItems: "center",
     justifyContent: "center",
+  },
+  back: {
+    position: "absolute",
+    top: 48,
+    left: 32,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(21,22,48,0.1)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarPlaceholder: {
+    width: 100,
+    height: 100,
+    backgroundColor: "#E1E2E6",
+    borderRadius: 50,
+    marginTop: 48,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatar: {
+    position: "absolute",
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
 });

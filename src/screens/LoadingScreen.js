@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import * as firebase from "firebase";
-import Fire from "../../Fire";
 
 const LoadingScreen = ({ navigation }) => {
   useEffect(() => {

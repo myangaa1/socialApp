@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import UserPermissions from "../utilities/UserPermissions";
 import Fire from "../../Fire";
 
 const firebase = require("firebase");
@@ -23,18 +24,8 @@ const PostScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    getPhotoPermissions();
+    UserPermissions.getCameraPermission();
   }, []);
-
-  const getPhotoPermissions = async () => {
-    //if (Constants.platform.ios) {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-
-    if (status != "granted") {
-      alert("We need permissions to access your comara roll");
-    }
-    //}
-  };
 
   const handlePost = () => {
     Fire.shared
