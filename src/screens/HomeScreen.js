@@ -10,43 +10,58 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import moment from "moment";
+import * as firebase from "firebase";
 
-const posts = [
-  {
-    id: "1",
-    name: "Koe Mcky",
-    text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-    timestamp: 1569109273726,
-    avatar: require("../../assets/tempAvatar.jpg"),
-    image: require("../../assets/tempImage1.jpg"),
-  },
-  {
-    id: "2",
-    name: "Koe Mcky",
-    text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-    timestamp: 1569109273726,
-    avatar: require("../../assets/tempAvatar.jpg"),
-    image: require("../../assets/tempImage1.jpg"),
-  },
-  {
-    id: "3",
-    name: "Koe Mcky",
-    text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-    timestamp: 1569109273726,
-    avatar: require("../../assets/tempAvatar.jpg"),
-    image: require("../../assets/tempImage1.jpg"),
-  },
-  {
-    id: "4",
-    name: "Koe Mcky",
-    text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-    timestamp: 1569109273726,
-    avatar: require("../../assets/tempAvatar.jpg"),
-    image: require("../../assets/tempImage1.jpg"),
-  },
-];
+// const posts = [
+//   {
+//     id: "1",
+//     name: "Koe Mcky",
+//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
+//     timestamp: 1569109273726,
+//     avatar: require("../../assets/tempAvatar.jpg"),
+//     image: require("../../assets/tempImage1.jpg"),
+//   },
+//   {
+//     id: "2",
+//     name: "Koe Mcky",
+//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
+//     timestamp: 1569109273726,
+//     avatar: require("../../assets/tempAvatar.jpg"),
+//     image: require("../../assets/tempImage1.jpg"),
+//   },
+//   {
+//     id: "3",
+//     name: "Koe Mcky",
+//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
+//     timestamp: 1569109273726,
+//     avatar: require("../../assets/tempAvatar.jpg"),
+//     image: require("../../assets/tempImage1.jpg"),
+//   },
+//   {
+//     id: "4",
+//     name: "Koe Mcky",
+//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
+//     timestamp: 1569109273726,
+//     avatar: require("../../assets/tempAvatar.jpg"),
+//     image: require("../../assets/tempImage1.jpg"),
+//   },
+// ];
 
 const HomeScreen = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("posts")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((postSnapshot) =>
+          setPosts((oldPosts) => [...oldPosts, postSnapshot.data()])
+        );
+      });
+  }, []);
+
   const renderPost = (post) => {
     return (
       <View style={css.feedItem}>
@@ -71,7 +86,13 @@ const HomeScreen = () => {
 
           <Text style={css.post}>{post.text}</Text>
 
-          <Image style={css.postImage} source={post.image} resizeMode="cover" />
+          <Image
+            style={css.postImage}
+            source={{
+              uri: post.image,
+            }}
+            resizeMode="cover"
+          />
 
           <View style={{ flexDirection: "row" }}>
             <Ionicons name="ios-heart" size={24} color="#73788B" />

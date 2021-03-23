@@ -14,16 +14,6 @@ import NotificationScreen from "./src/screens/NotificationScreen";
 import PostScreen from "./src/screens/PostScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 
-import * as firebase from "firebase";
-import FirebaseKeys from "./src/config/FirebaseKeys";
-import { Modal } from "react-native";
-
-const firebaseConfig = FirebaseKeys;
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
 const AppContainer = createStackNavigator(
   {
     default: createBottomTabNavigator(
@@ -116,7 +106,7 @@ const AuthStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: "Register",
+    initialRouteName: "Login",
   }
 );
 

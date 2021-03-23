@@ -6,6 +6,20 @@ class Fire {
     firebase.initializeApp(FirebaseKeys);
   }
 
+  getPosts = async () => {
+    return new Promise((res, rej) => {
+      this.firestore
+        .collection("posts")
+        .get()
+        .then((ref) => {
+          res(ref);
+        })
+        .catch((error) => rej(error));
+    });
+
+    // firebase.firestore().collection("users").get().then(snapshot => { snapshot.forEach(documentSnapshot => console.log(documentSnapshot.data())) })
+  };
+
   addPost = async ({ text, localUri }) => {
     const remoteUri = await this.uploadPhotoAsync(
       localUri,
@@ -55,7 +69,7 @@ class Fire {
     try {
       await firebase
         .auth()
-        .createUserWithEmailAndPassword(user.name, user.email);
+        .createUserWithEmailAndPassword(user.email, user.password);
 
       let db = this.firestore.collection("users").doc(this.uid);
 
@@ -78,6 +92,10 @@ class Fire {
     }
   };
 
+  signOut = () => {
+    firebase.auth().signOut();
+  };
+
   get firestore() {
     return firebase.firestore();
   }
@@ -92,4 +110,5 @@ class Fire {
 }
 
 Fire.shared = new Fire();
+
 export default Fire;
