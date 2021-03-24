@@ -10,56 +10,16 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import moment from "moment";
-import * as firebase from "firebase";
-
-// const posts = [
-//   {
-//     id: "1",
-//     name: "Koe Mcky",
-//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-//     timestamp: 1569109273726,
-//     avatar: require("../../assets/tempAvatar.jpg"),
-//     image: require("../../assets/tempImage1.jpg"),
-//   },
-//   {
-//     id: "2",
-//     name: "Koe Mcky",
-//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-//     timestamp: 1569109273726,
-//     avatar: require("../../assets/tempAvatar.jpg"),
-//     image: require("../../assets/tempImage1.jpg"),
-//   },
-//   {
-//     id: "3",
-//     name: "Koe Mcky",
-//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-//     timestamp: 1569109273726,
-//     avatar: require("../../assets/tempAvatar.jpg"),
-//     image: require("../../assets/tempImage1.jpg"),
-//   },
-//   {
-//     id: "4",
-//     name: "Koe Mcky",
-//     text: "lorem bjdkbdsk bb skjbksdbdskbbb bkbksb k bkb k bkfb kf",
-//     timestamp: 1569109273726,
-//     avatar: require("../../assets/tempAvatar.jpg"),
-//     image: require("../../assets/tempImage1.jpg"),
-//   },
-// ];
+import Fire from "../../Fire";
 
 const HomeScreen = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    firebase
-      .firestore()
-      .collection("posts")
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((postSnapshot) =>
-          setPosts((oldPosts) => [...oldPosts, postSnapshot.data()])
-        );
-      });
+    Fire.shared
+      .getPots()
+      .then((firebasePosts) => setPosts(firebasePosts))
+      .catch((err) => console.log(err.message));
   }, []);
 
   const renderPost = (post) => {

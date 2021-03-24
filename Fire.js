@@ -6,18 +6,18 @@ class Fire {
     firebase.initializeApp(FirebaseKeys);
   }
 
-  getPosts = async () => {
+  getPots = () => {
     return new Promise((res, rej) => {
+      const posts = [];
       this.firestore
         .collection("posts")
         .get()
-        .then((ref) => {
-          res(ref);
+        .then((snapshot) => {
+          snapshot.forEach((postSnapshot) => posts.push(postSnapshot.data()));
+          res(posts);
         })
         .catch((error) => rej(error));
     });
-
-    // firebase.firestore().collection("users").get().then(snapshot => { snapshot.forEach(documentSnapshot => console.log(documentSnapshot.data())) })
   };
 
   addPost = async ({ text, localUri }) => {
